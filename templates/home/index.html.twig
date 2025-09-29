@@ -1,0 +1,84 @@
+{# templates/product/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche de Produits{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .search-sidebar {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        .range-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        .range-inputs .form-group {
+            flex: 1;
+        }
+        .results-count {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+        .product-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+        }
+        .pagination {
+            margin-top: 2rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Barre latérale de recherche -->
+        <div class="col-md-3">
+            <div class="search-sidebar">
+                <h4>Filtres de recherche</h4>
+            </div>
+        </div>
+
+        <!-- Zone des résultats -->
+        <div class="col-md-9">
+            <div class="results-header">
+                <h2>Produits</h2>
+                <div class="results-count">
+                     produit(s) trouvé(s)
+                </div>
+            </div>
+
+            <div class="results">
+                <div class="alert alert-info">
+                    Aucun produit trouvé avec les critères sélectionnés.
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Sélectionnez...",
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock %}

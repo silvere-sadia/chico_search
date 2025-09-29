@@ -1,0 +1,231 @@
+{# templates/product/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche de Produits{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .search-sidebar {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        .range-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        .range-inputs .form-group {
+            flex: 1;
+        }
+        .results-count {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+        .product-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+        }
+        .pagination {
+            margin-top: 2rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Barre latérale de recherche -->
+        <div class="col-md-3">
+            <div class="search-sidebar">
+                <h4>Filtres de recherche</h4>
+                
+                {{ form_start(form, {'attr': {'class': 'search-form'}}) }}
+                
+                <div class="filter-group">
+                    {{ form_label(form.searchTerm) }}
+                    {{ form_widget(form.searchTerm) }}
+                </div>
+
+                <div class="filter-group">
+                    <label>Prix</label>
+                    <div class="range-inputs">
+                        <div class="form-group">
+                            {{ form_widget(form.minPrice, {'attr': {'placeholder': 'Min'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.maxPrice, {'attr': {'placeholder': 'Max'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>Quantité</label>
+                    <div class="range-inputs">
+                        <div class="form-group">
+                            {{ form_widget(form.minQuantity, {'attr': {'placeholder': 'Min'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.maxQuantity, {'attr': {'placeholder': 'Max'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>Poids</label>
+                    <div class="range-inputs">
+                        <div class="form-group">
+                            {{ form_widget(form.minWeight, {'attr': {'placeholder': 'Min'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.maxWeight, {'attr': {'placeholder': 'Max'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>Note</label>
+                    <div class="range-inputs">
+                        <div class="form-group">
+                            {{ form_widget(form.minRating, {'attr': {'placeholder': 'Min'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.maxRating, {'attr': {'placeholder': 'Max'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    {{ form_label(form.categories) }}
+                    {{ form_widget(form.categories) }}
+                </div>
+
+                {# <div class="filter-group">
+                    {{ form_label(form.tags) }}
+                    {{ form_widget(form.tags) }}
+                </div> #}
+
+                <div class="filter-group">
+                    {{ form_label(form.isActive) }}
+                    {{ form_widget(form.isActive) }}
+                </div>
+
+                <div class="filter-group">
+                    <label>Date de création</label>
+                    <div class="range-inputs">
+                        <div class="form-group">
+                            {{ form_widget(form.createdAfter, {'attr': {'placeholder': 'Début'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.createdBefore, {'attr': {'placeholder': 'Fin'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form_label(form.sortBy) }}
+                            {{ form_widget(form.sortBy) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_label(form.sortOrder) }}
+                            {{ form_widget(form.sortOrder) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    {{ form_widget(form.search) }}
+                    {{ form_widget(form.reset) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+        <!-- Zone des résultats -->
+        <div class="col-md-9">
+            <div class="results-header">
+                <h2>Produits</h2>
+                <div class="results-count">
+                    {{ results.totalItems }} produit(s) trouvé(s)
+                </div>
+            </div>
+
+            <div class="results">
+                {% for product in results.products %}
+                    <div class="product-card">
+                        <h5>{{ product.name }}</h5>
+                        <p class="text-muted">{{ product.description|slice(0, 100) }}...</p>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Prix:</strong> {{ product.price }} €
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Quantité:</strong> {{ product.quantity }}
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Catégorie:</strong> {{ product.category }}
+                            </div>
+                            <div class="col-md-2">
+                                <strong>Note:</strong> {{ product.rating ?? 'N/A' }}
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Créé le:</strong> {{ product.createdAt|date('d/m/Y') }}
+                            </div>
+                        </div>
+                        {# {% if product.tags is not empty %}
+                            <div class="mt-2">
+                                <strong>Tags:</strong>
+                                {% for tag in product.tags %}
+                                    <span class="badge bg-secondary">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %} #}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        Aucun produit trouvé avec les critères sélectionnés.
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if results.pagesCount > 1 %}
+                <nav class="pagination">
+                    <ul class="pagination">
+                        {% for i in 1..results.pagesCount %}
+                            <li class="page-item {% if i == results.currentPage %}active{% endif %}">
+                                <a class="page-link" href="{{ path('app_products', app.request.query.all|merge({'page': i})) }}">
+                                    {{ i }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Sélectionnez...",
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock %}
