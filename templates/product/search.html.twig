@@ -1,0 +1,119 @@
+{# templates/product/search.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css" rel="stylesheet">
+    <style>
+        .criteria-group {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .criteria-group h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .range-slider-container {
+            padding: 20px 0;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_start(form) }}
+            
+            {% for group in form %}
+                {% if group.vars.name not in ['search', 'reset'] %}
+                    <div class="criteria-group">
+                        <h4>{{ group.vars.label }}</h4>
+                        
+                        {% if group.vars.attr['data-type'] is defined and group.vars.attr['data-type'] == 'range' %}
+                            <div class="range-slider-container">
+                                <div id="slider-{{ group.vars.name }}"></div>
+                                {{ form_widget(group, {'attr': {'class': 'range-values'}}) }}
+                            </div>
+                        {% else %}
+                            {{ form_widget(group) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <div class="action-buttons">
+                {{ form_widget(form.search) }}
+                {{ form_widget(form.reset) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+
+        <div class="col-md-8">
+            {# Affichage des résultats #}
+            {% if results is not empty %}
+                <h3>{{ results|length }} résultat(s) trouvé(s)</h3>
+                {% for product in results %}
+                    <div class="product-card">
+                        <h5>{{ product.name }}</h5>
+                        <p>Prix: {{ product.price }} €</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialisation Select2
+            $('.select2-single, .select2-multiple').select2({
+                placeholder: "Sélectionnez...",
+                allowClear: true
+            });
+
+            // Initialisation des sliders de plage
+            $('.range-slider').each(function() {
+                const slider = document.getElementById('slider-' + $(this).attr('name'));
+                const min = $(this).data('min') || 0;
+                const max = $(this).data('max') || 100;
+
+                noUiSlider.create(slider, {
+                    start: [min, max],
+                    connect: true,
+                    range: {
+                        'min': min,
+                        'max': max
+                    }
+                });
+
+                slider.noUiSlider.on('update', function(values) {
+                    $(this).siblings('.range-values').val(values.join(' - '));
+                });
+            });
+
+            // Limitation des sélections multiples
+            $('[data-max-selections]').on('change', function() {
+                const maxSelections = $(this).data('max-selections');
+                if ($(this).find('option:selected').length > maxSelections) {
+                    alert('Vous ne pouvez sélectionner que ' + maxSelections + ' options maximum');
+                    $(this).val($(this).val().slice(0, maxSelections));
+                }
+            });
+        });
+    </script>
+{% endblock %}

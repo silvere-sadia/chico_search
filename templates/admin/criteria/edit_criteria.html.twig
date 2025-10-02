@@ -1,0 +1,161 @@
+{# templates/admin/criteria/new_criteria.html.twig #}
+{# templates/admin/criteria/edit_criteria.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if form.vars.data.id %}
+        Modifier le critère - {{ form.vars.data.name }}
+    {% else %}
+        Nouveau critère de recherche
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>
+                        {% if form.vars.data.id %}
+                            Modifier le critère
+                        {% else %}
+                            Créer un nouveau critère de recherche
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.name, {
+                                'attr': {
+                                    'class': 'form-control-lg',
+                                    'placeholder': 'Ex: Prix maximum'
+                                }
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.fieldName, {
+                                'attr': {
+                                    'class': 'form-control-lg',
+                                    'placeholder': 'Ex: max_price'
+                                },
+                                'help': 'Nom technique utilisé dans les requêtes (doit être unique)'
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.type, {
+                                'attr': {'class': 'form-select-lg'}
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.criteriaGroup, {
+                                'attr': {'class': 'form-select-lg'}
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form_row(form.sortOrder, {
+                                'attr': {'class': 'form-control-lg'}
+                            }) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_row(form.isActive) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_row(form.isRequired) }}
+                        </div>
+                    </div>
+
+                    {{ form_row(form.operators, {
+                        'attr': {'class': 'select2'},
+                        'help': 'Sélectionnez les opérateurs de comparaison disponibles pour ce critère'
+                    }) }}
+
+                    {# {{ form_row(form.options, {
+                        'attr': {
+                            'rows': 4,
+                            'placeholder': '{"choices": {"Option 1": "value1", "Option 2": "value2"}}'
+                        },
+                        'help': 'Options spécifiques au format JSON. Utilisez pour définir les choix, les limites, etc.'
+                    }) }} #}
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save me-2"></i>
+                            {% if form.vars.data.id %}
+                                Modifier le critère
+                            {% else %}
+                                Créer le critère
+                            {% endif %}
+                        </button>
+                        <a href="{{ path('admin_criteria_index') }}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i>Retour
+                        </a>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            {# Aide sur les types de critères #}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Guide des types de critères
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="fas fa-font text-info me-2"></i>Texte</h6>
+                            <p class="text-muted small">Champ de saisie libre pour texte</p>
+                            <small><strong>Opérateurs:</strong> contient, égal, commence par...</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="fas fa-hashtag text-info me-2"></i>Nombre entier</h6>
+                            <p class="text-muted small">Valeur numérique sans décimales</p>
+                            <small><strong>Opérateurs:</strong> égal, supérieur, inférieur, entre...</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="fas fa-divide text-info me-2"></i>Nombre décimal</h6>
+                            <p class="text-muted small">Valeur numérique avec décimales</p>
+                            <small><strong>Opérateurs:</strong> égal, supérieur, inférieur, entre...</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="fas fa-toggle-on text-info me-2"></i>Booléen</h6>
+                            <p class="text-muted small">Vrai ou faux (case à cocher)</p>
+                            <small><strong>Opérateurs:</strong> égal</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="fas fa-calendar text-info me-2"></i>Date</h6>
+                            <p class="text-muted small">Sélection de date</p>
+                            <small><strong>Opérateurs:</strong> égal, supérieur, inférieur, entre...</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="fas fa-list-ul text-info me-2"></i>Choix unique</h6>
+                            <p class="text-muted small">Sélection d'une seule option dans une liste</p>
+                            <small><strong>Opérateurs:</strong> égal, dans la liste...</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="fas fa-tasks text-info me-2"></i>Choix multiple</h6>
+                            <p class="text-muted small">Sélection de plusieurs options</p>
+                            <small><strong>Opérateurs:</strong> dans la liste, pas dans la liste...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

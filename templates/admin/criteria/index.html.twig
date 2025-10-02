@@ -1,0 +1,235 @@
+{# templates/admin/criteria/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Critères de Recherche{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background: white;
+            border-bottom: 2px solid #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .criteria-group {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .criteria-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        .badge-type {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+        }
+        .action-buttons .btn {
+            margin-left: 0.5rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #dee2e6;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="admin-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-4 mb-0">
+                    <i class="fas fa-filter me-3"></i>
+                    Gestion des Critères de Recherche
+                </h1>
+                <p class="lead mb-0">Configurez les critères de recherche disponibles dans votre application</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="btn-group">
+                    <a href="{{ path('admin_criteria_group_new') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i>Nouveau Groupe
+                    </a>
+                    <a href="{{ path('admin_criteria_new') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-plus me-2"></i>Nouveau Critère
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {# Alertes #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {# Liste des groupes avec leurs critères #}
+    {% if groups is not empty %}
+        {% for group in groups %}
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-1">
+                            {{ group.name }}
+                            {% if not group.isActive %}
+                                <span class="badge bg-warning">Inactif</span>
+                            {% endif %}
+                        </h4>
+                        <p class="text-muted mb-0">
+                            <small>
+                                <i class="fas fa-code me-1"></i>{{ group.code }}
+                                • 
+                                <i class="fas fa-display me-1"></i>
+                                {% set displayModes = {
+                                    'single_select': 'Select unique',
+                                    'multiple_select': 'Select multiple', 
+                                    'radio': 'Boutons radio',
+                                    'checkbox': 'Cases à cocher',
+                                    'input': 'Champ texte',
+                                    'range': 'Plage'
+                                } %}
+                                {{ displayModes[group.displayMode] ?? group.displayMode }}
+                            </small>
+                        </p>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="{{ path('admin_criteria_group_edit', {'id': group.id}) }}" 
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{{ path('admin_criteria_new', {'groupId': group.id}) }}" 
+                           class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-plus"></i> Critère
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if group.searchCriterias is not empty %}
+                        <div class="row">
+                            {% for criteria in group.searchCriterias %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="criteria-item">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">{{ criteria.name }}</h6>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <span class="badge bg-primary badge-type">
+                                                    <i class="fas fa-{{ get_criteria_icon(criteria.type) }} me-1"></i>
+                                                    {{ get_criteria_type_label(criteria.type) }}
+                                                </span>
+                                                <span class="badge bg-secondary">
+                                                    {{ criteria.fieldName }}
+                                                </span>
+                                                {% if not criteria.isActive %}
+                                                    <span class="badge bg-warning">Inactif</span>
+                                                {% endif %}
+                                                {% if criteria.isRequired %}
+                                                    <span class="badge bg-danger">Requis</span>
+                                                {% endif %}
+                                            </div>
+                                            {% if criteria.operators is not empty %}
+                                                <small class="text-muted">
+                                                    Opérateurs: {{ criteria.operators|join(', ') }}
+                                                </small>
+                                            {% endif %}
+                                        </div>
+                                        <div class="action-buttons">
+                                            <a href="{{ path('admin_criteria_edit', {'id': criteria.id}) }}" 
+                                               class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <h5>Aucun critère dans ce groupe</h5>
+                            <p class="text-muted">Ajoutez des critères pour permettre la recherche sur ce groupe</p>
+                            <a href="{{ path('admin_criteria_new', {'groupId': group.id}) }}" 
+                               class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Ajouter un critère
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <div class="empty-state">
+                    <i class="fas fa-filter fa-4x text-muted mb-4"></i>
+                    <h3>Aucun groupe de critères</h3>
+                    <p class="text-muted mb-4">
+                        Commencez par créer un groupe de critères pour organiser vos critères de recherche.
+                    </p>
+                    <a href="{{ path('admin_criteria_group_new') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i>Créer votre premier groupe
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialisation de Select2
+            $('.select2').select2({
+                placeholder: "Sélectionnez...",
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock %}
