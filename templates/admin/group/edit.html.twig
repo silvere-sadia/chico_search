@@ -2,6 +2,11 @@
 
 {% block title %}Edit Group{% endblock %}
 
+{% block importmap %}
+    {{parent()}}
+    {{ importmap('collection') }}
+{% endblock %}
+
 {% block body %}
 
     <div class="card text-bg-secondary mb-4">

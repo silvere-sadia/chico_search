@@ -12,11 +12,9 @@
                 <th>Name</th>
                 <th>Position</th>
                 <th>Color</th>
-                <th>ChildsLimit</th>
-                {# <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>DeletedAt</th> #}
                 <th>IsActive</th>
+                <th>ChildsLimit</th>
+                <th>Critères</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -27,11 +25,14 @@
                 <td>{{ group.name }}</td>
                 <td>{{ group.position }}</td>
                 <td>{{ group.color }}</td>
-                <td>{{ group.childsLimit }}</td>
-                {# <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ group.updatedAt ? group.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ group.deletedAt ? group.deletedAt|date('Y-m-d H:i:s') : '' }}</td> #}
                 <td>{{ group.isActive ? 'Yes' : 'No' }}</td>
+                <td>{{ group.childsLimit }}</td>
+                <td>
+                    {% for item in group.criterias %}
+                        <span class="text-success">{{item.name}}</span>
+                        {{loop.last ? '' : ', '}}
+                    {% endfor %}
+                </td>
                 <td>
                     <a href="{{ path('app_admin_group_show', {'id': group.id}) }}">show</a>
                     <a href="{{ path('app_admin_group_edit', {'id': group.id}) }}">edit</a>
@@ -39,7 +40,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="10">no records found</td>
+                <td colspan="8">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

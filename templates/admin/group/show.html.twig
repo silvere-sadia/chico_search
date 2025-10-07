@@ -28,6 +28,19 @@
                 <td>{{ group.childsLimit }}</td>
             </tr>
             <tr>
+                <th>IsActive</th>
+                <td>{{ group.isActive ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Criterias</th>
+                <td>
+                    {% for item in group.criterias %}
+                        <span class="text-success">{{item.name}}</span>
+                        {{loop.last ? '' : ', '}}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
                 <th>CreatedAt</th>
                 <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
@@ -38,10 +51,6 @@
             <tr>
                 <th>DeletedAt</th>
                 <td>{{ group.deletedAt ? group.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>IsActive</th>
-                <td>{{ group.isActive ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>

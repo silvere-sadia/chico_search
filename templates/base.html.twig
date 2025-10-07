@@ -118,13 +118,13 @@
                     <i class="fas fa-chart-bar"></i>
                     <span>Unit</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="{{path('app_admin_group_index')}}" class="menu-item">
                     <i class="fas fa-shopping-cart"></i>
-                    <span>Boutique</span>
+                    <span>Group</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="{{path('app_admin_group_index')}}" class="menu-item">
                     <i class="fas fa-cog"></i>
-                    <span>Paramètres</span>
+                    <span>Criteria</span>
                 </a>
             </div>
             
@@ -179,10 +179,13 @@
             });
 
             // Show sidebar on mobile when menu item is clicked
-            document.querySelector('.mobile-toggle').addEventListener('click', () => {
-                sidebar.classList.add('active');
-                overlay.classList.add('active');
-            });
+            const mobile = document.querySelector('.mobile-toggle');
+            if (mobile) {
+                mobile.addEventListener('click', () => {
+                    sidebar.classList.add('active');
+                    overlay.classList.add('active');
+                });
+            }
 
             // Close sidebar when window is resized to desktop size
             window.addEventListener('resize', () => {

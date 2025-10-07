@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GroupRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -49,6 +51,17 @@ class Group
 
     #[ORM\Column(nullable: true)]
     private ?bool $isActive = null;
+
+    /**
+     * @var Collection<int, Criteria>
+     */
+    #[ORM\OneToMany(targetEntity: Criteria::class, mappedBy: 'parent', cascade: ['persist', 'remove', 'refresh'])]
+    private Collection $criterias;
+
+    public function __construct()
+    {
+        $this->criterias = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -147,6 +160,36 @@ class Group
     public function setIsActive(?bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Criteria>
+     */
+    public function getCriterias(): Collection
+    {
+        return $this->criterias;
+    }
+
+    public function addCriteria(Criteria $criteria): static
+    {
+        if (!$this->criterias->contains($criteria)) {
+            $this->criterias->add($criteria);
+            $criteria->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCriteria(Criteria $criteria): static
+    {
+        if ($this->criterias->removeElement($criteria)) {
+            // set the owning side to null (unless already changed)
+            if ($criteria->getParent() === $this) {
+                $criteria->setParent(null);
+            }
+        }
 
         return $this;
     }
