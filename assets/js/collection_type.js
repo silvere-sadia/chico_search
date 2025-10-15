@@ -4,7 +4,7 @@ document.querySelectorAll('.add_item_link')
 });
 
 document
-    .querySelectorAll('ul.criterias ol')
+    .querySelectorAll('ul.criterias li')
     .forEach((criteria) => {
         addTagFormDeleteLink(criteria)
 })
@@ -12,7 +12,7 @@ document
 function addFormToCollection(e) {
     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
-    const item = document.createElement('ol');
+    const item = document.createElement('li');
     item.classList.add('border', 'border-light-subtle', 'rounded', 'p-2', 'm-1');
 
     item.innerHTML = collectionHolder
@@ -32,7 +32,7 @@ function addFormToCollection(e) {
 
 function addTagFormDeleteLink(item) {
     const removeFormButton = document.createElement('button');
-    removeFormButton.classList.add('btn', 'btn-danger');
+    removeFormButton.classList.add('btn', 'btn-danger', 'text-end');
     removeFormButton.innerText = 'Delete this criteria';
 
     item.append(removeFormButton);

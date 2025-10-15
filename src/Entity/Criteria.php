@@ -41,6 +41,12 @@ class Criteria
     #[ORM\ManyToOne(inversedBy: 'criterias')]
     private ?Group $parent = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $rangeStart = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $rangeEnd = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +156,30 @@ class Criteria
     public function setParent(?Group $parent): static
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getRangeStart(): ?int
+    {
+        return $this->rangeStart;
+    }
+
+    public function setRangeStart(?int $rangeStart): static
+    {
+        $this->rangeStart = $rangeStart;
+
+        return $this;
+    }
+
+    public function getRangeEnd(): ?int
+    {
+        return $this->rangeEnd;
+    }
+
+    public function setRangeEnd(?int $rangeEnd): static
+    {
+        $this->rangeEnd = $rangeEnd;
 
         return $this;
     }

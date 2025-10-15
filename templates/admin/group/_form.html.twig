@@ -1,30 +1,133 @@
+
 {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.position) }}
-    {{ form_row(form.color) }}
-    {{ form_row(form.childsLimit) }}
-    {{ form_row(form.isActive) }}
-    {{ form_errors(form.criterias) }}
-    <div class="col">
-        <h6>Critères</h6>
-        <div class="p-4">
-            <ul
-                class="criterias mb-3"
-                data-index="{{ form.criterias|length > 0 ? form.criterias|last.vars.name + 1 : 0 }}"
-                data-prototype="{{ form_widget(form.criterias.vars.prototype)|e('html_attr') }}"
-            >
-                {% for criteriaField in form.criterias %}
-                    <ol class="border border-light-subtle rounded p-2 m-1">
-                        {{ form_errors(criteriaField) }}
-                        {{ form_widget(criteriaField) }}
-                    </ol>
-            {% endfor %}
-            </ul>
-            <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="criterias">
-            <i class="fa fa-plus"></i> Criteria
-            </button>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="shadow p-3 m-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.name) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.name) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.name) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.type) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.type) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.type) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.selectMode) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.selectMode) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.selectMode) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.unit) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.unit) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.unit) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4 col-xl-3">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.isActive) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.isActive) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.isActive) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4 col-xl-3">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.position) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.position) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.position) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4 col-xl-3">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.color) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.color) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.color) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.childsLimit) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.childsLimit) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.childsLimit) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        {% if app.request.attributes.get("_route") != 'app_admin_group_new' %}
+            <div class="col-12">
+                <div class="shadow p-3 m-2">
+                    {{ form_errors(form.criterias) }}
+                    <div class="col">
+                        <h6>Critères</h6>
+                        <div class="p-4">
+                            <ul
+                                class="criterias mb-3 list-unstyled"
+                                data-index="{{ form.criterias|length > 0 ? form.criterias|last.vars.name + 1 : 0 }}"
+                                data-prototype="{{ form_widget(form.criterias.vars.prototype)|e('html_attr') }}"
+                            >
+                                {% for criteriaField in form.criterias %}
+                                    <li class="border border-light-subtle rounded p-2 m-1">
+                                        {{ form_errors(criteriaField) }}
+                                        {{ form_widget(criteriaField) }}
+                                    </li>
+                            {% endfor %}
+                            </ul>
+                            <button type="button" class="add_item_link btn btn-primary my-4 w-50" data-collection-holder-class="criterias">
+                            <i class="fa fa-plus"></i> Criteria
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="my-2">
+            <button class="btn btn-primary w-100">{{ button_label|default('Save') }}</button>
         </div>
     </div>
-    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+</div>
 {{ form_end(form) }}
 

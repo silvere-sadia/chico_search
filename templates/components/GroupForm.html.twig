@@ -1,0 +1,188 @@
+<div {{ attributes }} >
+     {{form_start(form, {
+        'attr': {
+            'data-action': 'live#action:prevent',
+            'data-live-action-param': 'save'
+        }
+     })}}
+    <div class="container">
+        <div class="shadow p-3 m-2">
+            <div class="row my-2 py-2">
+                <div class="col-md-12">
+                    <button 
+                        class="btn btn-success" 
+                        data-action="live#action"
+                        data-live-action-param="refresh"
+                        type="sumbit"
+                    > <i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.name) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.name) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.name) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.type) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.type) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.type) }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% if form.rangeStart is defined %}
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.rangeStart) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.rangeStart) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.rangeStart) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if form.rangeEnd is defined %}
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label text-nowrap">{{ form_label(form.rangeEnd) }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.rangeEnd) }}
+                                </div>
+                                <div class="form-text text-danger">{{ form_errors(form.rangeEnd) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-md-12 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.selectMode) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.selectMode) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.selectMode) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6 col-xl-4">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.unit) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.unit) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.unit) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4 col-xl-3">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.isActive) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.isActive) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.isActive) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4 col-xl-3">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.position) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.position) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.position) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4 col-xl-3">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.color) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.color) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.color) }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label class="form-label text-nowrap">{{ form_label(form.childsLimit) }}</label>
+                            <div class="input-group">
+                                {{ form_widget(form.childsLimit) }}
+                            </div>
+                            <div class="form-text text-danger">{{ form_errors(form.childsLimit) }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+
+        {# {% if app.request.attributes.get("_route") != 'app_admin_group_new' and app.request.attributes.get("_route") == 'app_admin_group_edit' %} #}
+        {% if form.criterias is defined %}
+            <div class=" p-3">
+                <h3>Criterias:</h3>
+                {% for key, criteriaForm in form.criterias %}
+                    <div class="m-2 p-2 border border-light-subtl rounded">
+                        {{ form_widget(criteriaForm) }}
+                        
+                        <div class="d-flex justify-content-end">
+                            <button
+                                data-action="live#action"
+                                data-live-action-param="removeCriteria"
+                                data-live-index-param="{{ key }}"
+                                type="button"
+                                class="btn btn-danger text-end"
+                            >
+                                <i class="fa fa-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {# avoid an extra label for this field #}
+                {% do form.criterias.setRendered %}
+
+                <button
+                    data-action="live#action"
+                    data-live-action-param="addCriteria"
+                    type="button"
+                    class="btn btn-success"
+                ><i class="fa fa-trash"></i> Add Criteria</button>
+
+            </div>
+        {% endif %}
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="my-3">
+                    {{ form_widget(form.submit, {
+                        'attr': {
+                            'class' : 'border w-100 btn btn-primary'
+                        }
+                    }) }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {{form_end(form)}}
+</div>

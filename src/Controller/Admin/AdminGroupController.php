@@ -26,19 +26,21 @@ final class AdminGroupController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $group = new Group();
-        $form = $this->createForm(GroupType::class, $group);
+        $routeName = $request->get('_route');
+        $form = $this->createForm(GroupType::class, $group, ['route_name' => $routeName]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($group);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_group_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_group_edit', ['id'=>$group->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/group/new.html.twig', [
             'group' => $group,
             'form' => $form,
+            'route_name' => $routeName,
         ]);
     }
 

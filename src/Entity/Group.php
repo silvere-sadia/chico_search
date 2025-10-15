@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Enum\CriteriaValueType;
+use App\Enum\SelectMode;
 use App\Repository\GroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -58,7 +60,28 @@ class Group
     #[ORM\OneToMany(targetEntity: Criteria::class, mappedBy: 'parent', cascade: ['persist', 'remove', 'refresh'])]
     private Collection $criterias;
 
-    public function __construct()
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $selectMode = null;
+
+    #[ORM\ManyToOne]
+    private ?Unit $unit = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $options = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $rangeStart = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $rangeEnd = null;
+
+    public function __construct(
+        public ?CriteriaValueType $criteriaValueTypeEnum = null,
+        public ?SelectMode $selectModeEnum = null
+    )
     {
         $this->criterias = new ArrayCollection();
     }
@@ -193,4 +216,97 @@ class Group
 
         return $this;
     }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSelectMode(): ?string
+    {
+        return $this->selectMode;
+    }
+
+    public function setSelectMode(?string $selectMode): static
+    {
+        $this->selectMode = $selectMode;
+
+        return $this;
+    }
+
+    public function getUnit(): ?Unit
+    {
+        return $this->unit;
+    }
+
+    public function setUnit(?Unit $unit): static
+    {
+        $this->unit = $unit;
+
+        return $this;
+    }
+
+    public static function getAvailablesTypes(): array
+    {
+        return [
+            'Integer' => self::TYPE_INT,
+            'Float' => self::TYPE_FLOAT,
+            'Short Text' => self::TYPE_TEXT,
+            'Long Text' => self::TYPE_LONG_TEXT,
+            'Range' => self::TYPE_RANGE,
+            'Boolean' => self::TYPE_BOOLEAN,
+        ];
+    }
+
+    public static function getAvailablesSelectMode(): array
+    {
+        return [
+            'Single' => self::SELECT_MODE_SINGLE,
+            'Multiple' => self::SELECT_MODE_MULTIPLE,
+        ];
+    }
+
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(?array $options): static
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    public function getRangeStart(): ?int
+    {
+        return $this->rangeStart;
+    }
+
+    public function setRangeStart(?int $rangeStart): static
+    {
+        $this->rangeStart = $rangeStart;
+
+        return $this;
+    }
+
+    public function getRangeEnd(): ?int
+    {
+        return $this->rangeEnd;
+    }
+
+    public function setRangeEnd(?int $rangeEnd): static
+    {
+        $this->rangeEnd = $rangeEnd;
+
+        return $this;
+    }
+
 }
