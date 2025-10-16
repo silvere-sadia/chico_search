@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chimical Maker{% endblock %}
+
+{% block body %}
+        <div class="card text-bg-secondary mb-4">
+            <div class="card-header">
+                <h1>Define Chimical Settings</h1>
+            </div>
+            <div class="card-body">
+                {{ include('admin/chimical/maker/_form.html.twig') }}
+            </div>
+        </div>
+        {# <div class="my-2 p-2">
+            <a href="{{ path('app_admin_group_index') }}" class="btn btn-dark">back to list</a>
+        </div> #}
+{% endblock %}
