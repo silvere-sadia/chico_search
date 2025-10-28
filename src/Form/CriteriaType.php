@@ -21,17 +21,21 @@ class CriteriaType extends AbstractType
         $builder->add('name', TextType::class, [
                 'priority' => 10,
             ])
-            ->add('color', ColorType::class, [
+            ->add('value', TextType::class, [
                 'required' => false,
                 'priority' => 9,
             ])
-            ->add('position', IntegerType::class, [
+            ->add('color', ColorType::class, [
                 'required' => false,
                 'priority' => 8,
             ])
-            ->add('isActive', CheckboxType::class, [
+            ->add('position', IntegerType::class, [
                 'required' => false,
                 'priority' => 7,
+            ])
+            ->add('isActive', CheckboxType::class, [
+                'required' => false,
+                'priority' => 6,
             ])
 
         ;

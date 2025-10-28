@@ -47,6 +47,9 @@ class Criteria
     #[ORM\Column(nullable: true)]
     private ?int $rangeEnd = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $value = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -180,6 +183,18 @@ class Criteria
     public function setRangeEnd(?int $rangeEnd): static
     {
         $this->rangeEnd = $rangeEnd;
+
+        return $this;
+    }
+
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    public function setValue(?string $value): static
+    {
+        $this->value = $value;
 
         return $this;
     }

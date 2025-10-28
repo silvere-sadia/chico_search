@@ -23,6 +23,7 @@ class ChimicalCriteriaType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Chimical::class,
+            'validation_groups' => false,
         ]);
     }
 }

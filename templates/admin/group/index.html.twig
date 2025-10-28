@@ -10,10 +10,10 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Type</th>
                 <th>Position</th>
                 <th>Color</th>
                 <th>IsActive</th>
-                <th>ChildsLimit</th>
                 <th>Critères</th>
                 <th>actions</th>
             </tr>
@@ -23,10 +23,10 @@
             <tr>
                 <td>{{ group.id }}</td>
                 <td>{{ group.name }}</td>
+                <td>{{ group.type }}</td>
                 <td>{{ group.position }}</td>
                 <td>{{ group.color }}</td>
                 <td>{{ group.isActive ? 'Yes' : 'No' }}</td>
-                <td>{{ group.childsLimit }}</td>
                 <td>
                     {% for item in group.criterias %}
                         <span class="text-success">{{item.name}}</span>

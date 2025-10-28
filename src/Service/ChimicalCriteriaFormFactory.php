@@ -33,10 +33,7 @@ class ChimicalCriteriaFormFactory
         $formBuilder
             ->add('submit', SubmitType::class, [
             'label' => 'Save',
-            'attr' => ['class' => 'btn btn-primary']
-            ])->add('reset', SubmitType::class, [
-                'label' => 'Réinitialiser',
-                'attr' => ['class' => 'btn btn-secondary']
+            'attr' => ['class' => 'btn btn-primary w-100']
             ])
         ;
             
@@ -77,11 +74,18 @@ class ChimicalCriteriaFormFactory
             'required' => false,
             'mapped' => false,
             'expanded' => true,
+            'attr' => [
+                'class' => 'm-2 p-2 border rounded'
+            ],
         ];
 
         if ($group->getSelectMode() == $group::SELECT_MODE_MULTIPLE) {
             $options['multiple'] = true;
         }
+
+        // if ($group->getSelectMode() == $group::SELECT_MODE_SINGLE) {
+        //     $options['autocomplete'] = true;
+        // }
 
         $options['choices'] = $this->makeArrayOfChoice($group);
 
